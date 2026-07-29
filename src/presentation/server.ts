@@ -1,16 +1,12 @@
-import { CronJob } from 'cron'
+import { CheckService } from '../domain/use-cases/checks/check-service'
+import { CronService } from './cron/cron-service'
 
 export class Server {
   public static start() {
     console.log('Server started...')
 
-    const job = new CronJob(
-      '*/5 * * * * *', // cronTime
-      () => {
-        const date = new Date()
-        console.log('5 seconds', date)
-      },
-    )
-    job.start()
+    CronService.createJob('*/5 * * * * *', () => {
+      new CheckService().execute('https://google.com')
+    })
   }
 }
